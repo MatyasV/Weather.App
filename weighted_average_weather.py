@@ -83,6 +83,9 @@ def get_weather_at_point(weather_df, df_coords, point, weather_type, year, month
 
     # Get dict mapping loaction to weather
     weather_sub_df_at_time = get_all_weather_at_time(df=weather_df, year=year, month=month)
+    if weather_sub_df_at_time.empty:
+        return None
+
     weather_sub_df = weather_sub_df_at_time[['location', weather_type]]
     list_of_locations = list(weather_sub_df['location'])
     list_of_weather_values = list(weather_sub_df[weather_type])
@@ -136,21 +139,15 @@ def get_weather_at_all_points(weather_df, df_coords, weather_type, year, month):
                                                     weather_type=weather_type,
                                                     year=year,
                                                     month=month)
-            point_to_weather[(x, y)] = weather_at_point
+            if weather_at_point is not None:
+                point_to_weather[(x, y)] = weather_at_point
 
     return point_to_weather
 
 
 if __name__ == '__main__':
     df_weather = pd.read_excel(r'C:\Users\fergg\PycharmProjects\Weather.App\combined_df.xlsx')
-    # year = 2005
-    # month = 8
-    # new_df = get_all_weather_at_time(df=df, year=year, month=month)
-
     df_coord = pd.read_excel(r'C:\Users\fergg\PycharmProjects\Weather.App\coordinates.xlsx')
-    _point = (0.5, 0.5)
-    # get_dist_from_point_to_each_location(df_coords=df_coord, point=_point)
-
     weather_at_all_points = get_weather_at_all_points(df_weather, df_coord, weather_type='rain', year=2000, month=2)
 
     print('stop')
