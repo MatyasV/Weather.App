@@ -86,7 +86,7 @@ def get_weather_at_point(weather_df, df_coords, point, weather_type, year, month
     if weather_sub_df_at_time.empty:
         return None
 
-    weather_sub_df = weather_sub_df_at_time[['location', weather_type]]
+    weather_sub_df = weather_sub_df_at_time[['location', weather_type]].dropna()
     list_of_locations = list(weather_sub_df['location'])
     list_of_weather_values = list(weather_sub_df[weather_type])
     final_list_of_weather_values = []
@@ -94,6 +94,7 @@ def get_weather_at_point(weather_df, df_coords, point, weather_type, year, month
         if isinstance(val, float):
             final_list_of_weather_values.append(val)
         elif isinstance(val, str):
+
             cleaned_val = float(''.join([char for char in list(val) if char.isnumeric() or char == '.']))
             final_list_of_weather_values.append(cleaned_val)
         elif isinstance(val, int):
